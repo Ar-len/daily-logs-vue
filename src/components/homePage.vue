@@ -21,9 +21,8 @@
                 <router-link :to="{name:'homePage'}">Home</router-link>
             </v-breadcrumb-item>
             <v-breadcrumb-item href="">
-                <router-link :to="{name:'type'}">list</router-link>
+                <router-link :to="{name:paths.path}">{{paths.name}}</router-link>
             </v-breadcrumb-item>
-            <v-breadcrumb-item href="">App</v-breadcrumb-item>
           </v-breadcrumb>
           <div style="padding: 24px; background: #fff; min-height: 80%;">
               <router-view></router-view>
@@ -39,8 +38,17 @@
 
 <script>
 export default {
+  watch: {
+    menuData: {
+      handler: function (val, oldval) {
+        this.menuDataFilter(val)
+      },
+      deep: true
+    }
+  },
   data () {
     return {
+      paths: {},
       customCollapsed: false,
       menuData: [{
         name: 'User',
@@ -75,6 +83,17 @@ export default {
     }
   },
   methods: {
+    menuDataFilter (param) {
+      param.map((item, data, data1) => {
+        if (item.selected) {
+          this.paths = item
+          return
+        }
+        if (item.children && item.expand) {
+          this.menuDataFilter(item.children)
+        }
+      })
+    },
     toggle () {
       this.customCollapsed = !this.customCollapsed
     }

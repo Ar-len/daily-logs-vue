@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import type from './type/type.js'
-import typecopy from './type/type copy.js'
 Vue.use(Vuex)
 const storeObj = {
   namespaced: true,
@@ -11,7 +10,7 @@ const storeObj = {
   },
   actions: {},
   modules: {
-    type, typecopy
+    type
   }
 }
 export default new Vuex.Store(storeObj)

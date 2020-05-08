@@ -16,24 +16,24 @@ export default {
     }
   },
   created () {
-    console.log(this.typeModalVisible)
   },
   methods: {
     showAsyncModal () {
-      this.typeModalVisible = true
+      this.visible = true
     },
 
     handleAsyncOk () {
       /* 对话框将在两秒后关闭 */
       this.asyncConfirmLoading = true
       setTimeout(() => {
-        this.typeModalVisible = false
+        this.visible = false
         this.asyncConfirmLoading = false
+        this.$emit('viewType')
       }, 2000)
     },
 
     handleAsyncCancel () {
-      this.typeModalVisible = false
+      this.visible = false
     }
   }
 }

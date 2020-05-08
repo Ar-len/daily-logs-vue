@@ -40,10 +40,9 @@
         </div>
         <span v-else v-html="props.content"></span>
       </template>
-      <TypeModel :visible="typeModalVisible" />
     </v-data-table>
+    <TypeModel :visible="typeModalVisible" />
   </div>
-
 </template>
 
 <script>
@@ -55,7 +54,7 @@ export default {
   },
   data: function () {
     return {
-      typeModalVisible: true,
+      typeModalVisible: false,
       loadData (pramas) {
         return axios.get('static/datatable.json', pramas).then(res => {
           return res.data
@@ -86,9 +85,8 @@ export default {
   },
   methods: {
     viewType (pramas) {
-      this.typeModalVisible = true
       console.log(pramas)
-      // this.typeModalVisible = !this.typeModalVisible
+      this.typeModalVisible = !this.typeModalVisible
       console.log(this.typeModalVisible)
     }
   }

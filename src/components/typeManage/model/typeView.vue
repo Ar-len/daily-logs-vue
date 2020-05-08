@@ -1,6 +1,6 @@
 <template>
   <v-modal title="查看" :visible="visible" @ok="handleAsyncOk" @cancel="handleAsyncCancel"
-    :confirm-loading="asyncConfirmLoading">
+    :confirm-loading="asyncConfirmLoading" width="800">
     <div>
         <v-form direction="horizontal" :model="ruleForm" :rules="rules" ref="ruleForm">
             <v-form-item label="活动名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="name" has-feedback>
@@ -39,13 +39,13 @@ export default {
   data () {
     return {
       ruleForm: {
-        name: '',
-        region: '',
-        date: '',
+        name: '56',
+        region: '45',
+        date: '45',
         delivery: false,
         type: [],
-        resource: '',
-        desc: ''
+        resource: '45',
+        desc: '45'
       },
       rules: {
         name: [{

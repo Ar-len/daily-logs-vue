@@ -1,6 +1,6 @@
 <template>
   <v-modal :title="isEdit?'type编辑':'type增加'" :visible="visible" @ok="handleAsyncOk" @cancel="handleAsyncCancel"
-    :confirm-loading="asyncConfirmLoading">
+    :confirm-loading="asyncConfirmLoading" width="800">
     <div>
         <v-form direction="horizontal" :model="ruleForm" :rules="rules" ref="ruleForm">
             <v-form-item label="活动名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="name" has-feedback>

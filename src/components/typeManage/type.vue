@@ -20,7 +20,12 @@
       </v-form>
       <v-button slot="control" type="primary" html-type="button" icon="search">查询</v-button>
     </v-more-panel>
-    <v-data-table :data='loadData' :columns='longColumns' :fixed-left="0" :fixed-right="1">
+    <v-button-group>
+        <v-button type="primary" @click="addType()"><v-icon type="plus-circle-o"></v-icon> 新增</v-button>
+        <v-button type="primary"><v-icon type="download"></v-icon> 导出</v-button>
+    </v-button-group>
+    <v-data-table :data='loadData' :columns='longColumns' :fixed-left="0" :fixed-right="1" :stripe="true"
+        check-type="checkbox" @checkall="checkAll" @clickrow="clickRow" >
       <template slot="td" slot-scope="props">
         <div v-if="props.column.field=='action'" class="text-center">
           <v-button-group>
@@ -67,13 +72,15 @@ export default {
       typeViewVisible: false,
       typeAddOrEditVisible: false,
       loadData (pramas) {
+        console.log(pramas)
         return axios.get('static/datatable.json', pramas).then(res => {
           return res.data
         })
       },
       longColumns: [{
         title: '歌名',
-        field: 'name'
+        field: 'name',
+        sort: true
       },
       {
         title: '时长',
@@ -89,12 +96,24 @@ export default {
       },
       {
         title: '操作',
-        field: 'action'
+        field: 'action',
+        className: 'text-center'
       }
       ]
     }
   },
   methods: {
+    checkAll: function (value) {
+      this.checkAllMsg = '当前全选状态是：' + value
+    },
+    clickRow: function (obj) {
+      console.log(obj)
+      this.clickRowMsg = '当前点击第' + obj.index + '行'
+    },
+    addType () {
+      this.isEdit = false
+      this.typeAddOrEditVisible = true
+    },
     editType () {
       this.isEdit = true
       this.typeAddOrEditVisible = true

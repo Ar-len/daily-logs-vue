@@ -41,20 +41,31 @@
         <span v-else v-html="props.content"></span>
       </template>
     </v-data-table>
-    <TypeModel :visible="typeModalVisible" />
+    <typeAddOrEdit :visible="typeAddOrEditVisible" @ok="typeOk" @cancel="typeCancel" :isEdit="isEdit"/>
+    <typeView :visible="typeViewVisible" @ok="typeOk" @cancel="typeCancel"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import TypeModel from '@/components/typeManage/model/typeModel.vue'
+import { mapState } from 'vuex'
+import typeAddOrEdit from '@/components/typeManage/model/typeAddOrEdit'
+import typeView from '@/components/typeManage/model/typeView'
 export default {
+  computed: {
+    ...mapState({
+      type: state => state.type
+    })
+  },
   components: {
-    TypeModel
+    typeAddOrEdit,
+    typeView
   },
   data: function () {
     return {
-      typeModalVisible: false,
+      isEdit: false,
+      typeViewVisible: false,
+      typeAddOrEditVisible: false,
       loadData (pramas) {
         return axios.get('static/datatable.json', pramas).then(res => {
           return res.data
@@ -84,10 +95,20 @@ export default {
     }
   },
   methods: {
+    editType () {
+      this.isEdit = true
+      this.typeAddOrEditVisible = true
+    },
     viewType (pramas) {
-      console.log(pramas)
-      this.typeModalVisible = !this.typeModalVisible
-      console.log(this.typeModalVisible)
+      this.typeViewVisible = true
+    },
+    typeCancel () {
+      this.typeViewVisible = false
+      this.typeAddOrEditVisible = false
+    },
+    typeOk () {
+      this.typeViewVisible = false
+      this.typeAddOrEditVisible = false
     }
   }
 }

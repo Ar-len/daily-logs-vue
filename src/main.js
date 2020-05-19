@@ -5,11 +5,15 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import Api from './api/index.js'
+import Vuex from 'vuex'
+import store from './store/index'
 import 'vue-beauty/package/style/vue-beauty.min.css'
 // 引入并注册ui组件
 import vueBeauty from 'vue-beauty'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(store)
+Vue.use(Vuex)
 Vue.use(ElementUI)
 Vue.use(vueBeauty)
 Vue.prototype.$api = Api
@@ -20,6 +24,7 @@ new Vue({
   el: '#app',
   router,
   axios,
+  store,
   components: { App },
   template: '<App/>'
 })

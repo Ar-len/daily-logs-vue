@@ -20,7 +20,12 @@
       </v-form>
       <v-button slot="control" type="primary" html-type="button" icon="search">查询</v-button>
     </v-more-panel>
-    <v-data-table :data='loadData' :columns='longColumns' :fixed-left="0" :fixed-right="1">
+    <v-button-group>
+        <v-button type="primary" @click="addType()"><v-icon type="plus-circle-o"></v-icon> 新增</v-button>
+        <v-button type="primary"><v-icon type="download"></v-icon> 导出</v-button>
+    </v-button-group>
+    <v-data-table :data='loadData' :columns='longColumns' :fixed-left="0" :fixed-right="1" :stripe="true"
+        check-type="checkbox" @checkall="checkAll" @clickrow="clickRow" >
       <template slot="td" slot-scope="props">
         <div v-if="props.column.field=='action'" class="text-center">
           <v-button-group>
@@ -41,28 +46,41 @@
         <span v-else v-html="props.content"></span>
       </template>
     </v-data-table>
-    <TypeModel :visible="typeModalVisible" />
+    <typeAddOrEdit :visible="typeAddOrEditVisible" @ok="typeOk" @cancel="typeCancel" :isEdit="isEdit"/>
+    <typeView :visible="typeViewVisible" @ok="typeOk" @cancel="typeCancel"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import TypeModel from '@/components/typeManage/model/typeModel.vue'
+import { mapState } from 'vuex'
+import typeAddOrEdit from '@/components/typeManage/model/typeAddOrEdit'
+import typeView from '@/components/typeManage/model/typeView'
 export default {
+  computed: {
+    ...mapState({
+      type: state => state.type
+    })
+  },
   components: {
-    TypeModel
+    typeAddOrEdit,
+    typeView
   },
   data: function () {
     return {
-      typeModalVisible: false,
+      isEdit: false,
+      typeViewVisible: false,
+      typeAddOrEditVisible: false,
       loadData (pramas) {
+        console.log(pramas)
         return axios.get('static/datatable.json', pramas).then(res => {
           return res.data
         })
       },
       longColumns: [{
         title: '歌名',
-        field: 'name'
+        field: 'name',
+        sort: true
       },
       {
         title: '时长',
@@ -78,16 +96,38 @@ export default {
       },
       {
         title: '操作',
-        field: 'action'
+        field: 'action',
+        className: 'text-center'
       }
       ]
     }
   },
   methods: {
+    checkAll: function (value) {
+      this.checkAllMsg = '当前全选状态是：' + value
+    },
+    clickRow: function (obj) {
+      console.log(obj)
+      this.clickRowMsg = '当前点击第' + obj.index + '行'
+    },
+    addType () {
+      this.isEdit = false
+      this.typeAddOrEditVisible = true
+    },
+    editType () {
+      this.isEdit = true
+      this.typeAddOrEditVisible = true
+    },
     viewType (pramas) {
-      console.log(pramas)
-      this.typeModalVisible = !this.typeModalVisible
-      console.log(this.typeModalVisible)
+      this.typeViewVisible = true
+    },
+    typeCancel () {
+      this.typeViewVisible = false
+      this.typeAddOrEditVisible = false
+    },
+    typeOk () {
+      this.typeViewVisible = false
+      this.typeAddOrEditVisible = false
     }
   }
 }
